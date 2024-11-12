@@ -17,8 +17,6 @@ class Rectangle {
 
 const rect = new Rectangle(2, 4, 'red')
 const area = rect.area()
-const painted = rect.paint('red')
 
 console.log(rect)
-console.log(area)
-console.log(painted)
+rect.paint()
