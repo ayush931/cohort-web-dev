@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo</title>
+</head>
+<body>
+    <input type="text">
+    <button onclick="addTodo()">Add Todo</button>
+</body>
+<script>
+    function deleteTodo (index) {
+        const element = document.getElementById(index)
+        element.parentNode.removeChild(element)
+    }
+
+    let ctr = 0
+    function addTodo () {
+        const inputElement = document.querySelector('input')
+        const value = inputElement.value
+
+        const newDiv = document.createElement('div')
+        newDiv.setAttribute('id', ctr)
+        
+        newDiv.innerHTML = value + ' <button onclick="deleteTodo(' +ctr+ ')">Delete Todo</button>'
+        
+        document.querySelector('body').appendChild(newDiv)
+        ctr = ctr + 1
+    }
+</script>
+</html>
