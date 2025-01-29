@@ -1,16 +1,5 @@
 import mongoose, { Schema } from "mongoose";
 
-async function connectDB() {
-    await mongoose.connect("mongodb+srv://ayush:111@cluster0.mur2t.mongodb.net/CourseSelling")
-}
-
-if (connectDB()) {
-    console.log("Connected to DB")
-}
-else {
-    console.log("Failed to connect to DB")
-}
-
 const userSchema = new Schema ({
     email: {
         type: String,
