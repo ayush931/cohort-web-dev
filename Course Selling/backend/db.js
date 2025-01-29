@@ -1,8 +1,17 @@
 import mongoose, { Schema } from "mongoose";
 
-mongoose.connect("mongodb+srv://ayush:111@cluster0.mur2t.mongodb.net/CourseSelling")
+async function connectDB() {
+    await mongoose.connect("mongodb+srv://ayush:111@cluster0.mur2t.mongodb.net/CourseSelling")
+}
 
-const userSchema = Schema ({
+if (connectDB()) {
+    console.log("Connected to DB")
+}
+else {
+    console.log("Failed to connect to DB")
+}
+
+const userSchema = new Schema ({
     email: {
         type: String,
         unique: true
@@ -12,7 +21,7 @@ const userSchema = Schema ({
     lastName: String,
 })
 
-const adminSchema = Schema ({
+const adminSchema = new Schema ({
     email: {
         type: String,
         unique: true
@@ -22,7 +31,7 @@ const adminSchema = Schema ({
     lastName: String
 })
 
-const courseSchema = Schema ({
+const courseSchema = new Schema ({
     title: String,
     description: String,
     price: Number,
@@ -30,14 +39,14 @@ const courseSchema = Schema ({
     creatorId: Schema.Types.ObjectId
 })
 
-const purchaseSchema = Schema ({
+const purchaseSchema = new Schema ({
     userId: Schema.Types.ObjectId,
     courseId: Schema.Types.ObjectId
 })
 
-const userModel = mongoose.Model("user", userSchema)
-const adminModel = mongoose.Model("admin", adminSchema)
-const courseModel = mongoose.Model("course", courseSchema)
-const purchaseModel = mongoose.Model("purchase", purchaseSchema)
+const userModel = mongoose.model("user", userSchema)
+const adminModel = mongoose.model("admin", adminSchema)
+const courseModel = mongoose.model("course", courseSchema)
+const purchaseModel = mongoose.model("purchase", purchaseSchema)
 
 export { userModel, adminModel, courseModel, purchaseModel }

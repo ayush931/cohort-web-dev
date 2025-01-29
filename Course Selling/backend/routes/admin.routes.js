@@ -1,5 +1,6 @@
 import { Router } from "express";
 const adminRoutes = Router()
+import { adminModel } from "../db.js";
 
 adminRoutes.post("/signin", function (req, res) {
     res.json({
