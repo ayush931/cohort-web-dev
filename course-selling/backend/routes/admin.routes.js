@@ -2,8 +2,11 @@ import { Router } from "express";
 const adminRoutes = Router()
 import { adminModel, courseModel } from "../db.js";
 import jwt from 'jsonwebtoken'
-import { JWT_ADMIN_SECRET } from "../config.js";
 import adminMiddleware from "../middlewares/admin.middleware.js";
+import { config } from "dotenv";
+config()
+
+const JWT_ADMIN_SECRET = process.env.JWT_ADMIN_SECRET
 
 adminRoutes.post("/signup", async function (req, res) {
     const { email, password, firstName, lastName } = req.body
@@ -30,7 +33,6 @@ adminRoutes.post("/signin", async function (req, res) {
         email: email,
         password: password
     })
-    console.log(admin)
 
     // Todo Try cookie based authentication
 
@@ -55,7 +57,7 @@ adminRoutes.post("/signin", async function (req, res) {
 
 adminRoutes.post("/course", adminMiddleware, async function (req, res) {
     const adminId = req.adminId
-    const { title, description, price, imageUrl, creatorId } = req.body
+    const { title, description, price, imageUrl } = req.body
 
     const course = await courseModel.create({
         title: title,
@@ -84,13 +86,12 @@ adminRoutes.put("/course", adminMiddleware, async function (req, res) {
 
     const course = await courseModel.updateOne({
         _id: courseId,
-        adminId: creatorId
+        creatorId: adminId
     }, {
         title: title,
         description: description,
         price: price,
-        imageUrl: imageUrl,
-        creatorId: adminId
+        imageUrl: imageUrl
     })
 
     if (course) {
@@ -109,11 +110,11 @@ adminRoutes.put("/course", adminMiddleware, async function (req, res) {
 adminRoutes.get("/course/bulk", adminMiddleware, async function (req, res) {
     const adminId = req.adminId
 
-    const courses = await adminModel.find({
+    const courses = await courseModel.find({
         creatorId: adminId
     })
 
-    if (course) {
+    if (courses) {
         res.json({
             message: "Got all the course",
             courses

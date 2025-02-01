@@ -1,7 +1,9 @@
 import { Router } from "express"
 import { userModel } from "../db.js"
 import jwt from "jsonwebtoken"
-import { JWT_USER_SECRET } from "../config.js"
+const JWT_USER_SECRET = process.env.JWT_USER_SECRET
+import { config } from "dotenv"
+config()
 
 const userRoutes = Router()
 

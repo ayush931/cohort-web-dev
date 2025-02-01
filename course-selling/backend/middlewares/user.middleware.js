@@ -1,5 +1,5 @@
-import { JWT_USER_SECRET } from "../config.js";
 import jwt from 'jsonwebtoken'
+const JWT_USER_SECRET = process.env.JWT_USER_SECRET
 
 function userMiddleware (req, res, next) {
     const token = req.headers.token

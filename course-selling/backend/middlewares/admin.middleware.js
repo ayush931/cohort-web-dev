@@ -1,5 +1,6 @@
-import { JWT_ADMIN_SECRET } from "../config.js";
 import jwt from 'jsonwebtoken'
+
+const JWT_ADMIN_SECRET = process.env.JWT_ADMIN_SECRET
 
 function adminMiddleware (req, res, next) {
     const token = req.headers.token
