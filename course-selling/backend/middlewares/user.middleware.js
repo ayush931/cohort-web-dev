@@ -1,4 +1,6 @@
 import jwt from 'jsonwebtoken'
+import { config } from 'dotenv'
+config()
 const JWT_USER_SECRET = process.env.JWT_USER_SECRET
 
 function userMiddleware (req, res, next) {

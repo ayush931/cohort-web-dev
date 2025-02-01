@@ -1,10 +1,11 @@
 import { Router } from "express"
-import { userModel } from "../db.js"
+import { courseModel, purchaseModel, userModel } from "../db.js"
 import jwt from "jsonwebtoken"
-const JWT_USER_SECRET = process.env.JWT_USER_SECRET
 import { config } from "dotenv"
+import userMiddleware from "../middlewares/user.middleware.js"
 config()
 
+const JWT_USER_SECRET = process.env.JWT_USER_SECRET
 const userRoutes = Router()
 
 userRoutes.post("/signup", async function (req, res) {
@@ -54,9 +55,20 @@ userRoutes.post("/signin", async function (req, res) {
    
 })
 
-userRoutes.get("/purchases", function (req, res) {
+userRoutes.get("/purchases", userMiddleware, async function (req, res) {
+    const userId = req.userId
+
+    const purchases = await purchaseModel.find({
+        userId: userId
+    })
+
+    const courseData = await courseModel.find({
+        _id: { $in: purchases.map(x => x.courseId) }
+    })
+
     res.json({
-        message: "Welcome to Home page"
+        purchases,
+        courseData
     })
 })
 
