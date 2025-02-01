@@ -2,7 +2,7 @@ import { Router } from "express"
 import { userModel } from "../db.js"
 import jwt from "jsonwebtoken"
 
-const JWT_SECRET = "1234567890"
+const JWT_USER_SECRET = "1234567890"
 const userRoutes = Router()
 
 userRoutes.post("/signup", async function (req, res) {
@@ -17,7 +17,7 @@ userRoutes.post("/signup", async function (req, res) {
         lastName: lastName 
     })
     res.json({
-        message: "Signed in"
+        message: "Signed up"
     })
 })
 
@@ -37,7 +37,7 @@ userRoutes.post("/signin", async function (req, res) {
     if (user) {
         const token = jwt.sign({
             id: user._id
-        }, JWT_SECRET)
+        }, JWT_USER_SECRET)
 
         res.json({
             message: "Signed in",
