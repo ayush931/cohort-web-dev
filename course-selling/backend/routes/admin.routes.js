@@ -1,9 +1,9 @@
 import { Router } from "express";
 const adminRoutes = Router()
-import { adminModel } from "../db.js";
+import { adminModel, courseModel } from "../db.js";
 import jwt from 'jsonwebtoken'
-
-const JWT_ADMIN_SECRET = "abcdef"
+import { JWT_ADMIN_SECRET } from "../config.js";
+import adminMiddleware from "../middlewares/admin.middleware.js";
 
 adminRoutes.post("/signup", async function (req, res) {
     const { email, password, firstName, lastName } = req.body
@@ -53,22 +53,77 @@ adminRoutes.post("/signin", async function (req, res) {
 })
 
 
-adminRoutes.post("/course", function (req, res) {
-    res.json({
-        message: "Signed in"
+adminRoutes.post("/course", adminMiddleware, async function (req, res) {
+    const adminId = req.adminId
+    const { title, description, price, imageUrl, creatorId } = req.body
+
+    const course = await courseModel.create({
+        title: title,
+        description: description,
+        price: price,
+        imageUrl: imageUrl,
+        creatorId: adminId
     })
+
+    if (course) {
+        res.json({
+            message: "Course created",
+            courseId: course._id
+        })
+    }
+    else {
+        res.json({
+            message: "Something wrong while creating course"
+        })
+    }
 })
 
-adminRoutes.put("/course", function (req, res) {
-    res.json({
-        message: "Signed in"
+adminRoutes.put("/course", adminMiddleware, async function (req, res) {
+    const adminId = req.adminId
+    const { title, description, price, imageUrl, courseId } = req.body
+
+    const course = await courseModel.updateOne({
+        _id: courseId,
+        adminId: creatorId
+    }, {
+        title: title,
+        description: description,
+        price: price,
+        imageUrl: imageUrl,
+        creatorId: adminId
     })
+
+    if (course) {
+        res.json({
+            message: "Course updated successfully",
+            courseId: course._id
+        })
+    }
+    else {
+        res.json({
+            message: "Failed to update the course"
+        })
+    }
 })
 
-adminRoutes.get("/course/bulk", function (req, res) {
-    res.json({
-        message: "Signed in"
+adminRoutes.get("/course/bulk", adminMiddleware, async function (req, res) {
+    const adminId = req.adminId
+
+    const courses = await adminModel.find({
+        creatorId: adminId
     })
+
+    if (course) {
+        res.json({
+            message: "Got all the course",
+            courses
+        })
+    }
+    else {
+        res.status(403).json({
+            message: 'Unable to fetch the course'
+        })
+    }
 })
 
 export default adminRoutes
