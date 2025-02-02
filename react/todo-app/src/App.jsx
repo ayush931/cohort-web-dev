@@ -1,8 +1,7 @@
-
 import { useState } from "react";
 import "./App.css";
 
-export default function App() {
+function App() {
   const [todos, setTodos] = useState([
     {
       title: "Go to gym",
@@ -52,3 +51,4 @@ export default function App() {
   );
 }
 
+export default App
