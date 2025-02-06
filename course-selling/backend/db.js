@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import jwt from 'jsonwebtoken'
 
 const userSchema = new Schema ({
     email: {
@@ -32,6 +33,18 @@ const purchaseSchema = new Schema ({
     userId: Schema.Types.ObjectId,
     courseId: Schema.Types.ObjectId
 })
+
+userSchema.methods = {
+    generateJwtToken: async function () {
+        return await jwt.sign(
+            {_id: this.id, email: this.email, firstName: this.firstName, lastName: this.lastName},
+            process.env.JWT_USER_SECRET,
+            {
+                expiresIn: '1hr'
+            }
+        )
+    }
+}
 
 const userModel = mongoose.model("user", userSchema)
 const adminModel = mongoose.model("admin", adminSchema)

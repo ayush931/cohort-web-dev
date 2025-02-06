@@ -3,22 +3,51 @@ import { courseModel, purchaseModel, userModel } from "../db.js"
 import jwt from "jsonwebtoken"
 import { config } from "dotenv"
 import userMiddleware from "../middlewares/user.middleware.js"
+import z from 'zod'
+import bcrypt from 'bcrypt'
 config()
 
 const JWT_USER_SECRET = process.env.JWT_USER_SECRET
 const userRoutes = Router()
 
 userRoutes.post("/signup", async function (req, res) {
+
+    const requiredBody = z.object({
+        email: z.string().email().toLowerCase(),
+        password: z.string().password().min(5).max(25),
+        firstName: z.string().trim(),
+        lastName: z.string().trim()
+    })
+
+    const parsedDataWithSuccess = requiredBody.safeParse(req.body)
+
+    if (!parsedDataWithSuccess.success) {
+        res.json({
+            message: "Incorrect validation",
+            error: parsedDataWithSuccess.error
+        })
+    }
+
     const { email, password, firstName, lastName } = req.body
-    // Todo: Add the zod validation here
-    // Todo: Add the bcrypt password 
+
+    if (!email || !password || !firstName || !lastName) {
+        res.status(403).json({
+            message: "All fields are required"
+        })
+    }
+    
+    const hashedPassword = await bcrypt.hash(password, 10)
+
     // Todo: Add the try catch block
     await userModel.create({ 
         email: email, 
-        password: password, 
+        password: hashedPassword, 
         firstName: firstName, 
         lastName: lastName 
     })
+
+
+
     res.json({
         message: "Signed up"
     })
