@@ -17,6 +17,7 @@ import UseEffectD from './UseEffectD.jsx'
 import Todos from './Todos.jsx'
 import { Fragment } from 'react'
 import SinglePage from './SinglePage.jsx'
+import UseRef from './useRef.jsx'
 
 createRoot(document.getElementById('root')).render(
   <>
@@ -36,6 +37,7 @@ createRoot(document.getElementById('root')).render(
     <Todos />
     <ErrorBoundaries />
     <Fragment /> */}
-    <SinglePage />
+    {/* <SinglePage /> */}
+    <UseRef />
     </>
 )
