@@ -16,10 +16,11 @@ import UseStates from './UseStates.jsx'
 import UseEffectD from './UseEffectD.jsx'
 import Todos from './Todos.jsx'
 import { Fragment } from 'react'
+import SinglePage from './SinglePage.jsx'
 
 createRoot(document.getElementById('root')).render(
   <>
-    <App />
+    {/* <App />
     <Header />
     <Button />
     <TodoData />
@@ -34,6 +35,7 @@ createRoot(document.getElementById('root')).render(
     <UseEffectD />
     <Todos />
     <ErrorBoundaries />
-    <Fragment />
+    <Fragment /> */}
+    <SinglePage />
     </>
 )
