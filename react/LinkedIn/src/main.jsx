@@ -20,6 +20,7 @@ import SinglePage from './SinglePage.jsx'
 import UseRef from './useRef.jsx'
 import Clock from './Clock.jsx'
 import Bulb from './Bulb.jsx'
+import UseContext from './useContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <>
@@ -42,6 +43,7 @@ createRoot(document.getElementById('root')).render(
     {/* <SinglePage /> */}
     {/* <UseRef /> */}
     {/* <Clock /> */}
-    <Bulb />
+    {/* <Bulb /> */}
+    <UseContext />
     </>
 )
