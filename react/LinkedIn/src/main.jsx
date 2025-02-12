@@ -23,6 +23,8 @@ import Bulb from './Bulb.jsx'
 import UseContext from './useContext.jsx'
 import Recoil from './useContexts.jsx'
 import UseContexts from './useContexts.jsx'
+import CustomHook from './CustomHook.jsx'
+import { UsePrev } from './usePrev.jsx'
 
 createRoot(document.getElementById('root')).render(
   <>
@@ -48,6 +50,8 @@ createRoot(document.getElementById('root')).render(
     {/* <Bulb /> */}
     {/* <UseContext /> */}
     {/* <UseContexts /> */}
-    <Recoil />
+    {/* <Recoil /> */}
+    {/* <CustomHook /> */}
+    <UsePrev />
     </>
 )
