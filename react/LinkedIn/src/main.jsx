@@ -25,10 +25,12 @@ import Recoil from './useContexts.jsx'
 import UseContexts from './useContexts.jsx'
 import CustomHook from './CustomHook.jsx'
 import { UsePrev } from './usePrev.jsx'
+import UseDebounce from './UseDebounce.jsx'
+import UseDebounces from './UseDebounces.jsx'
 
 createRoot(document.getElementById('root')).render(
   <>
-    {/* <App />
+    <App />
     <Header />
     <Button />
     <TodoData />
@@ -43,15 +45,17 @@ createRoot(document.getElementById('root')).render(
     <UseEffectD />
     <Todos />
     <ErrorBoundaries />
-    <Fragment /> */}
-    {/* <SinglePage /> */}
-    {/* <UseRef /> */}
-    {/* <Clock /> */}
-    {/* <Bulb /> */}
-    {/* <UseContext /> */}
-    {/* <UseContexts /> */}
-    {/* <Recoil /> */}
-    {/* <CustomHook /> */}
+    <Fragment />
+    <SinglePage />
+    <UseRef />
+    <Clock />
+    <Bulb />
+    <UseContext />
+    <UseContexts />
+    <Recoil />
+    <CustomHook />
     <UsePrev />
+    <UseDebounce />
+    <UseDebounces />
     </>
 )
