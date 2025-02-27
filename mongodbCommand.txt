@@ -149,5 +149,3 @@ db.<collection_name>.deleteOne({_id: 1}) -> delete the whole document having the
 db.<collection_name>.updateOne({_id: 6}, {$unset: {'metadata': 1}}) -> remove the metadata section from the whole _id: 6 data
 
 db.<collection_name>.deleteMany({price: 55}) -> delete all the data having price 55
-
-
