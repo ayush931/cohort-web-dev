@@ -1,0 +1,151 @@
+show dbs; -> to show the databases.
+
+use <database-name>; -> to use the given database.
+
+db.dropDatabase(); -> to delete the database.
+
+show collections; -> to get all the collections.
+
+db.createCollection(<collection-name>); -> to create a new collection.
+
+db.<collection-name>.drop(); -> to delete the collection.
+
+db.<collection-name>.insertOne({}) || db.insertOne({}) -> to insert the key value pair in database;
+
+db.<collection-name>.insertMany([{}, {}, {}]) || db.insertMany([{}, {}, {}]) -> to insert the multiple key value pair in database;
+
+db.<collection-name>.find() -> to get all the contents in the collection.
+
+db.<collection-name>.insertMany([{}, {}, {ordered: false}]) -> add all the correct data except the wrong one.
+
+db.<collection-name>.find().limit(n) -> show the n number of datas only.
+
+db.<collection-name>.find({"key": "value"}) -> only show the data with the given key value pair.
+
+db.<collection-name>.findOne({"key": "value"}) -> only show one data with the given key value pair.
+
+// For importing the different files in mongodb
+
+mongoimport jsonfile.json -d database_name -c collection_name
+
+mongoimport products.json -d shop -c products
+
+mongoimport products.json -d shop -c products --jsonArray
+
+// Comparison operator 
+
+db.<collection_name>.find({"key": {$eq: "value"}}) -> $eq is the equal to operator and show the same key value pair.
+
+db.<collection_name>.find({"key": {$eq: "value"}}).count() -> give the total number of data present there. 
+
+db.<collection_name>.find({"key": {$ne: "value"}}) -> $ne: is not equal, show other than given key pair value
+
+db.<collection_name>.find({"key": {$gt: "value"}}) -> $gt: greater than
+
+db.<collection_name>.find({"key": {$gte: "value"}}) -> $gte: greater than equal to
+
+db.<collection_name>.find({"key": {$lt: "value"}}) -> $lt: less than
+
+db.<collection_name>.find({"key": {$lte: "value"}}) -> $lte: less than equal to
+
+db.<collection_name>.find({"key": {$in: [69, 99, 129]}}) -> $in: in operator, show the data including all the key value pair in the array
+
+db.<collection_name>.find({"key": {$nin: [69, 99, 129]}}) -> $nin: not equal to
+
+// Cursor methods
+
+sort() -> for the sorting of the data
+limit() -> limiting the number of data shown
+count() -> give the number of data present
+skip() -> sort on the basis of given data
+
+db.<collection_name>.find({'price': {$gt: 300}}).sort({'price': 1}) -> show the data in ascending order
+
+db.<collection_name>.find({'price': {$gt: 300}}).sort({'price': -1}) -> show the data in descending order
+
+// Logical operator
+
+$and -> and operator
+$or -> or operator
+$not -> not operator
+$nor -> nor operator
+
+db.<collection_name>.find({$and: [{'price': {$gt: 200}}, {'name': 'Diamond Ring'}]}) -> example of and operator, give the data in which the price is greater than 200 and name is Diamond ring
+
+// Complex expression
+
+$expr -> complex expression
+
+db.<collection_name>.find({$expr: {$gt: ['$price', 1340]}})
+
+db.<collection_name>.find({$expr: {$gt: [{$multiply: ['quantity', 'price']}, '$targetPrice']}}) -> give the data in which the multiply of price and quantity is greater than target price
+
+// Element operator
+
+$exitst
+$type
+$size
+
+db.<collecion_name>.find({price: {$exists: true}}) -> to give the data in which price exists
+
+db.<collection_name>.find({price: {$type: 'number'}}) -> give the data in which the type of number field is string.
+
+db.<collection_name>.find({'comments': {$size: 4}}) -> give the data in which the size of key pair value is 4.
+
+// Projection
+
+db.<collection_name>.find({'comments': {$size: 2}}, {$comments: 1, _id: 0}) -> it will give data only with comment and hide _id field, but this is an exception.
+
+// Embedded documents
+
+db.<collection_name>.find({'comments.user':'Lily}) -> it will give those comments whose user is lily.
+
+db.<collection_name>.find({'metadata.views: {$gt: 2000}}) -> give the data in which the views in metadata is greater than 2000.
+
+$all operator
+
+db.<collection_name>.find({'comments.user': {$all: ['Alice', 'Vinod']}}) -> gives the data in which the comments user is both Alice and Vinod
+
+$elemMatch operator
+
+db.<collection_name>.find({'comments': {$elemMatch: {'user': 'Vinod', 'text': 'Thanks for sharing.'}}}) -> give the data in which the comments has user Vinod and the text is Thanks for Sharing.
+
+or db.<collection_name>.find({'comments.user': 'Vinod', 'comments.text': 'Thanks for sharing.'})
+
+// updating operation in MongoDB
+
+// updateOne
+
+db.<collection_name>.updateOne({_id: ObjectId('364378348t4yfy4t')}, {$set: {price: 450}}) -> it will update the price of the given objectId to 450.
+
+db.<collection_name>.updateOne({name: 'Designer Handbag'}, {$set: {isFeatured: false}}) -> it will update the isFeatured false whose name is Designer handbag.
+
+//updateMany
+
+db.<collection_name>.updateMany({price: 120}, {$set: {'isFeatured': true}}) -> update all the documents whose price is 120, and update the isFeatured to true.
+
+// Removing and Renaming field.
+
+db.<collection_name>.updateMany/One({filter}, {$unset: {fieldName: 1}}) -> remove the given fieldName from the data
+
+db.<collection_name>.updateMany({price: 123}, {$rename: {isFeatured: 'isFeature'}}) -> rename the field isFeatured to isFeature whose price is 123 in the given data.
+
+// Updating array and embedded documents
+
+db.<collection_name>.updateOne({_id: 5}, {$set: {'user': 'jessy'}}) -> add the new field called user: jessy in the document having _id: 5
+
+db.<collection_name>.updateOne({_id: 5}, {$unset: {'user': 1}}) -> remove the field called user having _id: 5
+
+db.<collection_name>.updateOne({_id: 5}, {$push: {comments: {user: 'Eva', text: 'Subscribe to my channel'}}}) -> add pr push the new object with the user and text in the comment section of the data.
+
+db.<collection_name>.updateOne({_id: 5}, {$pop: {'comments': 1}}) -> remove the last object from the comment section from the data
+
+db.<collection_name>.updateOne({_id: 7, 'comments.user': 'Alice'}, {$set: {'comments.$.text': 'Awesome Alice'}}) -> will the change the text of the user called ALice in the comments part of the data
+
+// Delete operation in MongoDB
+
+db.<collection_name>.deleteOne({_id: 1}) -> delete the whole document having the _id: 1
+
+db.<collection_name>.updateOne({_id: 6}, {$unset: {'metadata': 1}}) -> remove the metadata section from the whole _id: 6 data
+
+db.<collection_name>.deleteMany({price: 55}) -> delete all the data having price 55
