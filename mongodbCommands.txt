@@ -149,3 +149,75 @@ db.<collection_name>.deleteOne({_id: 1}) -> delete the whole document having the
 db.<collection_name>.updateOne({_id: 6}, {$unset: {'metadata': 1}}) -> remove the metadata section from the whole _id: 6 data
 
 db.<collection_name>.deleteMany({price: 55}) -> delete all the data having price 55
+
+db.<collection_name>.find({price: {$gt: 300}}).explain() -> give every details of the query, data, database and many more...
+
+db.<collection_name>.find({price: {$gt: 300}}).explain("executionStats") -> give the execution time to the query and many more ...
+
+db.<collection_name>.explain('executionStats').find({"name": "Air Fryer"}) -> find name having value Air Fryer
+
+// Managing indexes
+
+db.<collection_name>.createIndex({"name": 1})
+
+// After creating index of name and run this command
+db.<collection_name>.explain('executionStats').find({"name": "Air Fryer"}) -> it will not scan every file unlike it scan every file.
+
+db.<collection_name>.dropIndex({"name": 1}) -> remove the index
+
+db.<collection_name>.createIndex({email: 1}, {unique: true}) -> make the given field unique, not duplicate entry
+
+db.<collection_name>.createIndex({field: "text"})
+
+db.<collection_name>.find({$text: {$search: "keyword"}}) -> searching using index is faster than $regex search
+
+db.<collection_name>.find({field: {$regex: "air"}})
+
+// Aggregate
+
+Definition:- Aggregation is the process of performing transformation on documents and combining them to produce computed result
+Pipeline Stages:- Aggregations consists of multiple pipeline stages, each performing a specific operation on the input data.
+
+Benefits:- 
+  Aggregating data:- complex calculations and operations are possible.
+  Advanced Transformations:- Data can be combined, reshape and computed for insights.
+  Efficient processing:- Aggregations can handle large database efficiently.
+
+db.<colletion_name>.aggregate([{$match: {'name': 'Sleek Wooden Tuna'}}]) -> give the name having sleek wooden tuna
+
+db.<colletion_name>.aggregate([{$match: {price: {$gt: 1350}}}])
+
+// $group:- The $group stage groups documents by specified fields and performs aggregate operations on grouped data.
+
+db.<collection_name>.aggregate([{$group: {_id: "company", totalProducts: {$sum: 1}}}]) -> will group the company having same value and also give the total number of products
+
+db.<collecion_name>.aggregate([{$match: {company: '64c23350e32f4a51b19b9247'}}]) -> will give the data having the given the company name
+
+db.<collecion_name>.aggregate([{$group: {_id: "$company", totalProducts: {$sum: "$price"}}}])
+
+db.<collecion_name>.aggregate([{$match: {price: {$gt: 900}}},{$group: {_id: "$company",totalProducts: {$sum: "$price"}}}]) -> giving the sum of the totalProducts which price is greater than 900
+
+db.<collecion_name>.aggregate([{$match: {quantity: 5}},{$group: {_id: '$quantity',priceTotal: {$sum: '$price'},priceAvg: {$avg: '$price'}}}]) -> give the data having quantity 5 and also give the sum of the price and avg of all the price
+
+db.<collecion_name>.aggregate([{$match: {price: {$gt: 1200}}}, {$group: {_id: "$category", totalPrice: {$sum: "$price"}}}, {$sort: {totalPrice: -1}}]) -> sort the result 
+
+db.<collecion_name>.aggregate([{$project: {price: 1, _id: 0}}]) -> show the price and remove the _id section from the data
+
+db.<collecion_name>.aggregate([{$match: {price: {$gt: 1200}}},{$project: {price: 1, discountPrice: {$multiply: ['$price', 0.8]}}}]) -> will generate the discountPrice from the given price in the data.
+
+// $push -> The $push stage adds elements to an array field within documents
+// $unwind -> The $unwind stage deconstructs an array field and produces multiple documents.
+
+db.<collecion_name>.aggregate([{$match: {price: {$gt: 1200}}},{$group: {_id: '$price',allColors: {$push: '$colors'}}}]) -> push the colors in the field but made the array inside an array
+
+db.products.aggregate([{$unwind: "$colors"}, {$match: {price: {$gt: 1200}}}, {$group: {_id: '$price', allColors: {$push: '$colors'}}}]) -> destructure the array of the colors field
+
+db.products.aggregate([{$unwind: "$colors"}, {$match: {price: {$gt: 1200}}}, {$group: {_id: '$price', allColors: {$addToSet: '$colors'}}}]) -> remove the duplicate field from the color array
+
+db.products.aggregate([{$match: {price: {$gt: 1200}}}, {$unwind: '$colors'}, {$group: {_id: {priceGroup: "$price"}, colors: {$addToSet: "$colors"},},}, {$project: {_id: 1, colors: 1, colcolorLength: {$size: "$colors"}, }}])
+
+db.products.aggregate([{$match: {price: {$gt: 1200}}}, {$unwind: '$colors'}, {$group: {_id: {priceGroup: "$price"}, colors: {$addToSet: "$colors"},},}, {$project: {_id: 1, colors: 1, colorLength: {$size: "$colors"}, }}, {$limit: 1}]) -> $limit will set the limit, how many data will be shown
+
+db.products.aggregate([{$match: {price: {$gt: 1200}}}, {$unwind: '$colors'}, {$group: {_id: {priceGroup: "$price"}, colors: {$addToSet: "$colors"},},}, {$project: {_id: 1, colors: 1, colorLength: {$size: "$colors"}, }}, {$skip: 1}]) -> will skip the given number of the data in the database
+
+db.cols.aggregate([{$project: {name: 1, value: {$filter: {input: '$values', as: 'val', cond: {$gt: ['$$val', 30]}}}}}]) -> give the element of arrays more than 30 of value section.
