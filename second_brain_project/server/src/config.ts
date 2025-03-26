@@ -1,1 +1,1 @@
-export const JWT_PASSWORD = "123456";
+export const JWT_PASSWORD = "!23123";
