@@ -1,6 +1,8 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+console.log(process.env.NEXTAUTH_SECRET)
+
 const handler = NextAuth({
   providers: [
     CredentialsProvider({
@@ -35,6 +37,7 @@ const handler = NextAuth({
       },
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET
 });
 
 export { handler as GET, handler as POST };
